@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Input, Box, Flex, Button } from "@chakra-ui/react";
+import { Input, Box, Flex, Button, Center } from "@chakra-ui/react";
 
 const Home = () => {
   const [num1, setNum1] = useState("");
@@ -31,18 +31,21 @@ const Home = () => {
     setEqualClear(false);
   }
 
-  console.log(equalClear, isOperating, num1, num2);
-  function handleInputChange(event) {
-    event.preventDefault();
+  console.log(num1, num2, equalClear, isOperating);
 
-    if (!isNaN(event.target.value)) {
-      if (!isOperating) {
-        setNum1(event.target.value);
-      } else {
-        setNum2(event.target.value);
-      }
-    }
-  }
+  // function handleInputChange(event) {
+  //   if (equalClear) {
+  //     allClear();
+  //   }
+
+  //   if (!isNaN(event.target.value)) {
+  //     if (!equalClear && !isOperating) {
+  //       setNum1(event.target.value);
+  //     } else if (isOperating && num1) {
+  //       setNum2(event.target.value);
+  //     }
+  //   }
+  // }
 
   function handleNumberClick(value) {
     if (equalClear) {
@@ -311,10 +314,17 @@ const Home = () => {
 
   return (
     <>
-      <Box maxWidth={"1000px"}>
-        <Input value={!num2 ? num1 : num2} onChange={handleInputChange} />
-        {body}
-      </Box>
+      <Center>
+        <Box
+          marginTop={"200px"}
+          alignContent={"center"}
+          justifyContent={"center"}
+          maxWidth={"700px"}
+        >
+          <Input value={num2 === "" ? num1 : num2} />
+          {body}
+        </Box>
+      </Center>
     </>
   );
 };
