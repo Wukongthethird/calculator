@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Input, Box, Flex, Button } from "@chakra-ui/react";
 
 const Home = () => {
@@ -6,6 +6,7 @@ const Home = () => {
   const [isOperating, setIsOperating] = useState(false);
   const [operator, setOperator] = useState("");
   const [num2, setNum2] = useState("");
+  const [equalClear, setEqualClear] = useState(false);
 
   const operators = {
     "+": function (a, b) {
@@ -20,7 +21,6 @@ const Home = () => {
     "*": function (a, b) {
       return a * b;
     },
-    // ...
   };
 
   function allClear() {
@@ -28,8 +28,10 @@ const Home = () => {
     setNum2("");
     setIsOperating(false);
     setOperator("");
+    setEqualClear(false);
   }
 
+  console.log(equalClear, isOperating, num1, num2);
   function handleInputChange(event) {
     event.preventDefault();
 
@@ -39,6 +41,17 @@ const Home = () => {
       } else {
         setNum2(event.target.value);
       }
+    }
+  }
+
+  function handleNumberClick(value) {
+    if (equalClear) {
+      allClear();
+      setNum1(value);
+    } else if (!equalClear && !isOperating) {
+      setNum1(num1 + value);
+    } else if (num1 && isOperating) {
+      setNum2(num2 + value);
     }
   }
 
@@ -77,20 +90,12 @@ const Home = () => {
     }
   }
 
-  function handleNumberClick(value) {
-    if (!isOperating) {
-      setNum1(num1 + value);
-    } else {
-      setNum2(num2 + value);
-    }
-  }
-
   function handlesEquates() {
     if (!num2) {
       setIsOperating(false);
       return;
     }
-
+    console.log("handle equates", operator);
     if (operator == "/" && +num2 == 0) {
       setNum1("No");
       setNum2("");
@@ -98,16 +103,16 @@ const Home = () => {
     }
 
     const res = operators[operator](+num1, +num2);
-
     setNum1(res.toString());
     setNum2("");
     setOperator("");
   }
 
   function handleSetOperator(ops) {
-    if (isOperating) {
+    if (isOperating && operator) {
       handlesEquates();
     }
+
     setIsOperating(true);
     setOperator(ops);
   }
@@ -294,6 +299,7 @@ const Home = () => {
             onClick={(event) => {
               event.preventDefault();
               handlesEquates();
+              setEqualClear(true);
             }}
           >
             =
