@@ -33,19 +33,18 @@ const Home = () => {
 
   console.log(num1, num2, equalClear, isOperating);
 
-  // function handleInputChange(event) {
-  //   if (equalClear) {
-  //     allClear();
-  //   }
-
-  //   if (!isNaN(event.target.value)) {
-  //     if (!equalClear && !isOperating) {
-  //       setNum1(event.target.value);
-  //     } else if (isOperating && num1) {
-  //       setNum2(event.target.value);
-  //     }
-  //   }
-  // }
+  function handleInputChange(event) {
+    if (!isNaN(event.key)) {
+      if (equalClear) {
+        allClear();
+        setNum1(event.key);
+      } else if (!equalClear && !isOperating) {
+        setNum1((prev) => [...prev, event.key].join(""));
+      } else if (isOperating && num1) {
+        setNum2((prev) => [...prev, event.key].join(""));
+      }
+    }
+  }
 
   function handleNumberClick(value) {
     if (equalClear) {
@@ -321,7 +320,11 @@ const Home = () => {
           justifyContent={"center"}
           maxWidth={"700px"}
         >
-          <Input value={num2 === "" ? num1 : num2} />
+          <Input
+            value={!num2 ? num1 : num2}
+            onKeyDown={handleInputChange}
+            onChange={handleInputChange}
+          />
           {body}
         </Box>
       </Center>
